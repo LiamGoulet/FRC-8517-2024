@@ -54,7 +54,8 @@ public class DrivetrainDefaultCommand extends Command implements ICommand{
 
     // Get a new angle if the right x&y are greater than a certain point.
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
-      m_drive.setLastTargetAngle(new Rotation2d(rightY, rightX));
+     // m_drive.setLastTargetAngle(new Rotation2d(rightY, rightX));
+     m_drive.m_lastTargetAngle.setTargetAngle(rightX, rightY);
     }
 
     // Call the appropriate drive mode. Selected by the driver controller Square button.

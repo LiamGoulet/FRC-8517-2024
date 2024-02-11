@@ -11,13 +11,14 @@ import frc.robot.RobotContainer;
 import frc.robot.lib.EDriveMode;
 import frc.robot.lib.ICommand;
 import frc.robot.lib.ISubsystem;
+import frc.robot.lib.TargetAngle;
 import frc.robot.lib.k;
 import frc.robot.lib.Swerve.SwerveDrive;
 
 public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public SwerveDrive m_robotDrive;
   public EDriveMode m_driveMode = EDriveMode.ANGLE_FIELD_CENTRIC;
-  public Rotation2d m_lastTargetAngle = new Rotation2d();
+  public TargetAngle m_lastTargetAngle = new TargetAngle();
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
      m_robotDrive = new SwerveDrive();
@@ -41,13 +42,13 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   }
 
   public void driveAngleFieldCentric(double _x, double _y){
-    m_robotDrive.driveAngleFieldCentric(_x, _y, m_lastTargetAngle);
+    m_robotDrive.driveAngleFieldCentric(_x, _y, m_lastTargetAngle.getTargetAngle());
   }
 
   public void drivePolarFieldCentric(double _driveAngle_deg, double _speed, double _robotAngle_deg){
     double x = Math.sin(Units.degreesToRadians(_driveAngle_deg)) * _speed;
     double y = Math.cos(Units.degreesToRadians(_driveAngle_deg)) * _speed;
-    m_lastTargetAngle = new Rotation2d(Units.degreesToRadians(_robotAngle_deg));
+    m_lastTargetAngle.setTargetAngle(Units.degreesToRadians(_robotAngle_deg));
     driveAngleFieldCentric(x, y);
   }
 
@@ -80,9 +81,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
     m_robotDrive.resetYaw();
   }
 
-  public void setLastTargetAngle(Rotation2d _targetAngle){
-    m_lastTargetAngle = _targetAngle;
-  }
+  // public void setLastTargetAngle(Rotation2d _targetAngle){
+  //   m_lastTargetAngle.setTargetAngle(getRobotAngle());
+  // }
 
   public void updateDashboard(){
     SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
